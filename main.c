@@ -14,11 +14,14 @@ struct item *newnode = NULL; // create new items
 
 void viewCart(){
     temp = head;
+    int price = 0;
     printf("Name:\tPrice\n");
     while(temp != NULL){
         printf("%s\t%d\n", temp -> pizzaName, temp -> price);
+        price += temp -> price;
         temp = temp -> next;
     }
+    printf("Total Cost: %d\n", price);
 }
 
 void addItemsToCart(char pizzaName[], int price){
