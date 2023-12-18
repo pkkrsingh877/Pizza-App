@@ -11,6 +11,17 @@ struct item{
 struct item *head = NULL; // store address of first node
 struct item *temp = NULL; // traverse the items in cart
 struct item *newnode = NULL; // create new items
+struct item *removeNode = NULL; // remove nodes
+
+void removeItems(){
+    temp = head;
+    while(temp != NULL){
+        removeNode = temp;
+        temp = temp -> next;
+        printf("Free: %s\n", removeNode -> pizzaName);
+        free(removeNode);
+    }
+}
 
 void viewCart(){
     temp = head;
@@ -121,14 +132,15 @@ int main(){
                 break;
             case 4:
                 printf("Thank You For Your Visit!\n");
-                return 0;
+                break;
             default: 
                 printf("Something went wrong!\n");
-                return -1;
+                break;
         }
         printf("Do you want to continue(0:No): ");
         scanf("%d", &keepGoing);
     }while(keepGoing);
     
+    removeItems();
     return 0;
 }
