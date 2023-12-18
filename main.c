@@ -12,6 +12,7 @@ struct item *head = NULL; // store address of first node
 struct item *temp = NULL; // traverse the items in cart
 struct item *newnode = NULL; // create new items
 struct item *removeNode = NULL; // remove nodes
+struct item *tail = NULL; // stores address of last node
 
 void removeItems(){
     temp = head;
@@ -42,10 +43,10 @@ void addItemsToCart(char pizzaName[], int price){
     newnode -> next = NULL;
 
     if(head == NULL){
-        head = temp = newnode;
+        head = tail = newnode;
     }else{
-        temp -> next = newnode;
-        temp = newnode;
+        tail -> next = newnode;
+        tail = newnode;
     }
 }
 
