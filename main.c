@@ -1,6 +1,6 @@
-#include 
-#include 
-#include 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct item{
     char pizzaName[50];
