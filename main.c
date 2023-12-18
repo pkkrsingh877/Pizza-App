@@ -16,7 +16,7 @@ void viewCart(){
     temp = head;
     printf("Name:\tPrice\n");
     while(temp != NULL){
-        printf("%s\t%d\n", newnode -> pizzaName, newnode -> price);
+        printf("%s\t%d\n", temp -> pizzaName, temp -> price);
         temp = temp -> next;
     }
 }
