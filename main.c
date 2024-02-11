@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 struct item{
     char pizzaName[50];
@@ -23,12 +24,6 @@ struct order {
     int totalCost;
 };
 
-struct item *head = NULL; // store address of first node
-struct item *temp = NULL; // traverse the items in cart
-struct item *newnode = NULL; // create new items
-struct item *removeNode = NULL; // remove nodes
-struct item *tail = NULL; // stores address of last node
-
 void makeOrder();
 void removeItems();
 void viewCart();
@@ -37,6 +32,14 @@ void mainMenu();
 void vegMenu();
 void nonVegMenu();
 long int generateOrderId();
+void addCustomer();
+void writeCustomerToFile(struct customer *);
+
+struct item *head = NULL; // store address of first node
+struct item *temp = NULL; // traverse the items in cart
+struct item *newnode = NULL; // create new items
+struct item *removeNode = NULL; // remove nodes
+struct item *tail = NULL; // stores address of last node
 
 int main(){
     int keepGoing = 1, choice;
@@ -215,4 +218,40 @@ long int generateOrderId() {
     }
 
     return orderId;
+}
+
+// Function to get customer details as input and write to customer.csv file
+void writeCustomerToFile(struct customer *cust) {
+    // Open the file for writing in append mode
+    FILE *file = fopen("customers.csv", "a");
+    if (file == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    // Write customer data to the file
+    fprintf(file, "%s,%s,%d,%ld\n", cust->name, cust->gender, cust->age, cust->orderId);
+
+    // Close the file
+    fclose(file);
+
+    printf("Customer data written to customer.csv successfully.\n");
+}
+
+// Function to add a customer by getting details as input and writing to customer.csv file
+void addCustomer() {
+    // Declare a customer object to store input
+    struct customer cust;
+
+    // Get customer details as input
+    printf("Enter name: ");
+    scanf("%s", cust.name);
+    printf("Enter gender (male/female): ");
+    scanf("%s", cust.gender);
+    printf("Enter age: ");
+    scanf("%d", &cust.age);
+    printf("Enter orderId: ");
+    scanf("%ld", &cust.orderId);
+
+    writeCustomerToFile(&cust);
 }
