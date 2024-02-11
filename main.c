@@ -14,26 +14,49 @@ struct item *newnode = NULL; // create new items
 struct item *removeNode = NULL; // remove nodes
 struct item *tail = NULL; // stores address of last node
 
+// Function to make the order
+void makeOrder() {
+    // Display the current cart
+    viewCart();
+
+    // Prompt the user to confirm the order
+    char choice;
+    printf("Do you want to make this order? (Y/N): ");
+    scanf(" %c", &choice);
+
+    // If the user confirms, display a message and clear the cart
+    if (choice == 'Y' || choice == 'y') {
+        printf("Thank you for your order!\n");
+        removeItems();
+    } else {
+        printf("Order canceled.\n");
+    }
+}
+
 void removeItems(){
     temp = head;
     while(temp != NULL){
         removeNode = temp;
         temp = temp -> next;
-        printf("Free: %s\n", removeNode -> pizzaName);
+        printf("Removing: %s\n", removeNode -> pizzaName);
         free(removeNode);
     }
+    head = tail = NULL; // Reset head and tail pointers
 }
 
 void viewCart(){
     temp = head;
     int price = 0;
-    printf("Name:\tPrice\n");
+    printf("\n--------- Your Cart ---------\n");
+    printf("Name\t\tPrice\n");
+    printf("--------------------------------\n");
     while(temp != NULL){
-        printf("%s\t%d\n", temp -> pizzaName, temp -> price);
+        printf("%-20s %d\n", temp -> pizzaName, temp -> price);
         price += temp -> price;
         temp = temp -> next;
     }
-    printf("Total Cost: %d\n", price);
+    printf("--------------------------------\n");
+    printf("Total Cost: %d\n\n", price);
 }
 
 void addItemsToCart(char pizzaName[], int price){
@@ -51,94 +74,103 @@ void addItemsToCart(char pizzaName[], int price){
 }
 
 void mainMenu(){
+    printf("\n---------- Main Menu ----------\n");
     printf("1. Veg Pizza\n");
     printf("2. Non Veg Pizza\n");
     printf("3. View Cart\n");
     printf("4. Exit\n");
+    printf("------------------------------\n");
 }
 
 void vegMenu(){
+    printf("\n--------- Veg Pizza ---------\n");
     printf("1. Cheese Pizza\n");
     printf("2. Veggie Pizza\n");
     printf("3. Pepperoni Pizza\n");
-    printf("4. Exit\n");
+    printf("4. Back to Main Menu\n");
+    printf("-----------------------------\n");
 }
 
 void nonVegMenu(){
+    printf("\n-------- Non Veg Pizza --------\n");
     printf("1. BBQ Chicken Pizza\n");
     printf("2. Meat Pizza\n");
     printf("3. Gamberi Pizza\n");
-    printf("4. Exit\n");
+    printf("4. Back to Main Menu\n");
+    printf("-------------------------------\n");
 }
 
 int main(){
     int keepGoing = 1, choice;
     do{
         mainMenu();
-        printf("Your Choice: ");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
         switch(choice){
             case 1:
                 vegMenu();
-                printf("Your Choice: ");
+                printf("Enter your choice: ");
                 scanf("%d", &choice);
 
                 switch(choice){
                     case 1:
-                        printf("Cheese Pizza Coming Right Up!\n");
+                        printf("Adding Cheese Pizza to your cart.\n");
                         addItemsToCart("Cheese Pizza", 50);
                         break;
                     case 2:
-                        printf("Veggie Pizza Coming Right Up!\n");
+                        printf("Adding Veggie Pizza to your cart.\n");
                         addItemsToCart("Veggie Pizza", 50);
                         break;
                     case 3:
-                        printf("Pepperoni Pizza Coming Right Up!\n");
+                        printf("Adding Pepperoni Pizza to your cart.\n");
                         addItemsToCart("Pepperoni Pizza", 50);
                         break;
                     case 4:
-                        printf("Thanks for viewing Veg Pizza!\n");
+                        printf("Returning to Main Menu.\n");
                         break;
                     default: 
-                        printf("Invalid Order\n");
+                        printf("Invalid choice.\n");
                 }
                 break;
             case 2:
                 nonVegMenu();
-                printf("Your Choice: ");
+                printf("Enter your choice: ");
                 scanf("%d", &choice);
 
                 switch(choice){
                     case 1:
-                        printf("BBQ Chicken Pizza Coming Right Up!\n");
-                        addItemsToCart("BBQ Chicken Pizza", 50);
+                        printf("Adding BBQ Chicken Pizza to your cart.\n");
+                        addItemsToCart("BBQ Chicken Pizza", 60);
                         break;
                     case 2:
-                        printf("Meat Pizza Coming Right Up!\n");
-                        addItemsToCart("Meat Pizza", 50);
+                        printf("Adding Meat Pizza to your cart.\n");
+                        addItemsToCart("Meat Pizza", 60);
                         break;
                     case 3:
-                        printf("Gamberi Pizza Coming Right Up!\n");
-                        addItemsToCart("Gamberi Pizza", 50);
+                        printf("Adding Gamberi Pizza to your cart.\n");
+                        addItemsToCart("Gamberi Pizza", 60);
                         break;
                     case 4:
-                        printf("Thanks for viewing Non Veg Pizza!\n");
+                        printf("Returning to Main Menu.\n");
                         break;
                     default: 
-                        printf("Invalid Order\n");
+                        printf("Invalid choice.\n");
                 }
                 break;
             case 3:
                 viewCart();
                 break;
             case 4:
-                printf("Thank You For Your Visit!\n");
+                makeOrder();
+                break;
+            case 5:
+                printf("Thank you for visiting!\n");
                 break;
             default: 
-                printf("Something went wrong!\n");
+                printf("Invalid choice.\n");
                 break;
         }
-        printf("Do you want to continue(0:No): ");
+        printf("Do you want to continue (0: No)? ");
         scanf("%d", &keepGoing);
     }while(keepGoing);
     
