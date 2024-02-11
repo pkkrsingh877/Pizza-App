@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 struct item{
     char pizzaName[50];
@@ -14,12 +15,12 @@ struct customer {
     char name[50];
     char gender[10];
     int age;
-    long int orderId; // Assuming orderId is of type long
+    unsigned long long int orderId; // Assuming orderId is of type long long
 };
 
 // Structure to represent an Order
 struct order {
-    long int orderId;
+    unsigned long long int orderId;
     char allItems[1000];
     int totalCost;
 };
@@ -42,6 +43,9 @@ struct item *removeNode = NULL; // remove nodes
 struct item *tail = NULL; // stores address of last node
 
 int main(){
+
+    addCustomer();
+
     int keepGoing = 1, choice;
     do{
         mainMenu();
@@ -208,13 +212,13 @@ void nonVegMenu(){
 
 // Function to generate a 16-digit long orderId
 long int generateOrderId() {
-    long int orderId = 0;
+    long long int orderId = 0;
     // Seed the random number generator
     srand(time(NULL));
 
     // Generate random digits for the orderId
     for (int i = 0; i < 16; i++) {
-        orderId = orderId * 10 + rand() % 10;
+        orderId = orderId * 10 + abs(rand() % 10);
     }
 
     return orderId;
@@ -245,13 +249,21 @@ void addCustomer() {
 
     // Get customer details as input
     printf("Enter name: ");
-    scanf("%s", cust.name);
+    fgets(cust.name, sizeof(cust.name), stdin);
+    // Remove the newline character from the end of the name
+    cust.name[strcspn(cust.name, "\n")] = '\0'; 
+
     printf("Enter gender (male/female): ");
-    scanf("%s", cust.gender);
+    fgets(cust.gender, sizeof(cust.gender), stdin);
+    // Remove the newline character from the end of the gender
+    cust.gender[strcspn(cust.gender, "\n")] = '\0'; 
+
     printf("Enter age: ");
     scanf("%d", &cust.age);
-    printf("Enter orderId: ");
-    scanf("%ld", &cust.orderId);
+
+    // Generate orderId using the generateOrderId function
+    cust.orderId = generateOrderId();
 
     writeCustomerToFile(&cust);
 }
+
