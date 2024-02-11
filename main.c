@@ -33,7 +33,7 @@ void mainMenu();
 void vegMenu();
 void nonVegMenu();
 long int generateOrderId();
-void addCustomer();
+struct customer* addCustomer();
 void writeCustomerToFile(struct customer *);
 
 struct item *head = NULL; // store address of first node
@@ -44,7 +44,7 @@ struct item *tail = NULL; // stores address of last node
 
 int main(){
 
-    addCustomer();
+    struct customer* cust = addCustomer();
 
     int keepGoing = 1, choice;
     do{
@@ -106,7 +106,7 @@ int main(){
                 viewCart();
                 break;
             case 4:
-                makeOrder();
+                makeOrder(&cust, head);
                 break;
             case 5:
                 printf("Thank you for visiting!\n");
@@ -124,7 +124,7 @@ int main(){
 }
 
 // Function to make the order
-void makeOrder() {
+void makeOrder(struct customer *cust, struct item *head) {
     // Display the current cart
     viewCart();
 
@@ -135,6 +135,8 @@ void makeOrder() {
 
     // If the user confirms, display a message and clear the cart
     if (choice == 'Y' || choice == 'y') {
+        struct order ord;
+        writeOrderToFile(&ord, cust, head);
         printf("Thank you for your order!\n");
         removeItems();
     } else {
@@ -243,7 +245,7 @@ void writeCustomerToFile(struct customer *cust) {
 }
 
 // Function to add a customer by getting details as input and writing to customer.csv file
-void addCustomer() {
+struct customer* addCustomer() {
     // Declare a customer object to store input
     struct customer cust;
 
@@ -265,5 +267,37 @@ void addCustomer() {
     cust.orderId = generateOrderId();
 
     writeCustomerToFile(&cust);
+
+    return &cust;
 }
 
+// Function to write order data to the order.csv file
+void writeOrderToFile(struct order *ord, struct customer *cust, struct item *head) {
+    // Open the file for writing in append mode
+    FILE *file = fopen("orders.csv", "a");
+    if (file == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    // Traverse through items to create a string with item names and calculate total price
+    char allItems[1000] = ""; // Initialize an empty string for all items
+    int totalPrice = 0;
+    struct item *temp = head;
+    while (temp != NULL) {
+        // Concatenate each item name to the allItems string
+        strcat(allItems, temp->pizzaName);
+        strcat(allItems, ", ");
+        // Add the item price to the total price
+        totalPrice += temp->price;
+        temp = temp->next;
+    }
+
+    // Write order data to the file
+    fprintf(file, "%ld,%s,%s,%d,%d\n", cust->orderId, cust->name, allItems, totalPrice);
+
+    // Close the file
+    fclose(file);
+
+    printf("Order data written to orders.csv successfully.\n");
+}
